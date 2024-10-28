@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -17,7 +17,6 @@ import NextLink from "next/link";
 import clsx from "clsx";
 
 import { siteConfig } from "@/src/config/site";
-import { ThemeSwitch } from "@/src/components/UI/theme-switch";
 import {
   TwitterIcon,
   GithubIcon,
@@ -28,8 +27,17 @@ import {
 } from "@/src/components/icons";
 import { useUser } from "@/src/context/user.provider";
 import NavbarDropdown from "./NavbarDropdown";
+import { ThemeSwitch } from "./theme-switch";
 
-export const Navbar = () => {
+export type UserProps = {
+  user?: {
+    name?: string | null | undefined;
+    email?: string | null | undefined;
+    image?: string | null | undefined;
+  };
+};
+export const Navbar = ({session}: {session: UserProps | null}) => {
+  // console.log(session)
   const { user, isLoading } = useUser();
   const searchInput = (
     <Input
@@ -96,9 +104,9 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        {user?.email ? (
+        {user?.email || session?.user ? (
           <NavbarItem className="hidden sm:flex gap-2">
-            <NavbarDropdown />
+            <NavbarDropdown session={session} />
           </NavbarItem>
         ) : (
           <NavbarItem className="hidden sm:flex gap-2">
